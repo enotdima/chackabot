@@ -1,0 +1,29 @@
+quiz_text: "Здесь вы можете найти дополнительные задания. Они позволят вам быстрее попасть в следущий город и расскажут много интересного о Тинькофф"
+quiz_answers:
+  case1:
+    button_text: "Квест Недели"
+    respose: False
+    next_node: 1
+    tinks: 0
+    exp: 0
+
+  case2:
+    button_text: "Задание месяца"
+    respose: False
+    next_node: 2
+    tinks: 0
+    exp: 0
+
+  case3:
+    button_text: "Узнай больше о Тинькофф"
+    respose: False
+    next_node: 3
+    tinks: 0
+    exp: 0
+
+  case4:
+    button_text: "Случай в зоопарке"
+    respose: False
+    next_node: 4
+    tinks: 0
+    exp: 0

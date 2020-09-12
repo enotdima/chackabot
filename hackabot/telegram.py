@@ -41,6 +41,10 @@ def run_bot(config_path: str):
     with open(rules_path, 'r') as yml_rules_file:
         rules_text = yaml.load(yml_rules_file, Loader=yaml.FullLoader)
 
+    # load text of quizzes
+    quiz_path = config['telegram']['quiz_text']
+    with open(quiz_path, 'r') as yml_quiz_file:
+        quiz_text = yaml.load(yml_quiz_file, Loader=yaml.FullLoader)
 
     bot = telebot.TeleBot(token)
 
@@ -86,6 +90,19 @@ def run_bot(config_path: str):
             guy = message.from_user.id
             response = 'tinks: ' + str(money[guy]) + '\n' + 'xp: ' + str(exp[guy])
             _send(message, response)
+
+    @bot.message_handler(commands = ['quiz'])
+    def _state(message:telebot.types.Message):
+        with locks[message.chat.id]:
+            response = quiz_text['quiz_text']
+
+            keyboard = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+            answers = []
+            for quiz_key in quiz_text['quiz_answers']:
+                answers.append(types.KeyboardButton(text=quiz_text['quiz_answers'][quiz_key]['button_text']))
+            keyboard.add(*answers)
+
+            _send(message, response, keyboard)
             
 
     @bot.message_handler(commands=['FindMerchant'])
@@ -126,9 +143,6 @@ def run_bot(config_path: str):
             proc = subprocess.Popen(query, stdout=subprocess.PIPE, shell=True)
             (out, err) = proc.communicate()
 
-            print(f'##### OUT {out}')
-            print(f'####### ERR: {err}')
-
             response_suffix = ''
             out = out.decode('utf-8')
             out = out.replace('null', '""')
@@ -142,9 +156,6 @@ def run_bot(config_path: str):
             response = f'{response_prefix}{response_suffix}'
 
             _send(message, response)
-
-    def _maybe_you(username: str) -> str:
-        return f'А может ты пидар, {username}'
 
     def _send_response(message: telebot.types.Message):
         print(f'current message: {message}')
