@@ -48,12 +48,10 @@ def run_bot(config_path: str):
 
             response = button_texts['start_text']
             keyboard = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-            answer1 = types.KeyboardButton(text=button_texts['start_answers']['answer1'])
-            answer2 = types.KeyboardButton(text=button_texts['start_answers']['answer2'])
-            answer3 = types.KeyboardButton(text=button_texts['start_answers']['answer3'])
-            answer4 = types.KeyboardButton(text=button_texts['start_answers']['answer4'])
-
-            keyboard.add(answer1, answer2, answer3, answer4)
+            answers = []
+            for i in button_texts['start_answers'].keys():
+                answers.append(types.KeyboardButton(text=button_texts['start_answers'][i]))
+            keyboard.add(answers)
 
             _send(message, response, keyboard)
 
@@ -67,7 +65,14 @@ def run_bot(config_path: str):
 
         with locks[chat_id]:
             try:
-                response = _maybe_you(message.from_user.first_name)
+                response = button_texts['text_2']#message.json.text
+                keyboard = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+                answers = []
+                for i in button_texts['answers_2'].keys():
+                    answers.append(types.KeyboardButton(text = button_texts['answers_2'][i]))
+                keyboard.add(*answers)
+
+
             except Exception as e:
                 logger.exception(e)
                 response = 'Произошла ошибка'
@@ -75,7 +80,7 @@ def run_bot(config_path: str):
             if response is None:
                 response = 'Ответа нет'
 
-            _send(message, response=response)
+            _send(message, response, keyboard)
 
     @bot.message_handler()
     def send_response(message: telebot.types.Message):  # pylint:disable=unused-variable
