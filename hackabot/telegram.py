@@ -61,7 +61,7 @@ def run_bot(config_path: str):
             guy = message.from_user.id
             print(guy)
             curr_case[guy] = -1
-            money[guy] = 0
+            money[guy] = 1000
             exp[guy] = 0
             response = button_texts['start_text']
             keyboard = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
@@ -79,6 +79,14 @@ def run_bot(config_path: str):
             response = rules_text['rules']
 
             _send(message, response)
+
+    @bot.message_handler(commands = ['state'])
+    def _state(message:telebot.types.Message):
+        with locks[message.chat.id]:
+            guy = message.from_user.id
+            response = 'tinks: ' + str(money[guy]) + '\n' + 'xp: ' + str(exp[guy])
+            _send(message, response)
+            
 
     @bot.message_handler(commands=['FindMerchant'])
     def _find_merchant(message: telebot.types.Message):
@@ -161,10 +169,10 @@ def run_bot(config_path: str):
                             curr_case[user_id] = None
                         else:
                             curr_case[user_id] = int(button_texts[block][i]['next_node'])
-                        money[user_id] = button_texts[block][i]['tinks']
-                        exp[user_id] = button_texts[block][i]['exp']
+                        money[user_id] += int(button_texts[block][i]['tinks'])
+                        exp[user_id] += int(button_texts[block][i]['exp'])
                         if button_texts[block][i]['respose']:
-                            response = button_texts[block][i]['respose'] + '\n' + button_texts['text_'+ str(curr_case[user_id])]
+                            response = button_texts[block][i]['respose'] + '\n' + '\n' + button_texts['text_'+ str(curr_case[user_id])]
                         elif curr_case[user_id] > 0:
                             response = button_texts['text_' + str(curr_case[user_id])]
                         else:
