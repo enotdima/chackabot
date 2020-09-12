@@ -27,3 +27,162 @@ quiz_answers:
     next_node: 4
     tinks: 0
     exp: 0
+
+quiz_text1: "Пополни счёт телефона через приложении Тинькофф! Это быстро и безопасно."
+quiz_answers1:
+  case1:
+    button_text: "Не выполнено"
+    respose: False
+    next_node: 0
+    tinks: 0
+    exp: 0
+
+quiz_text2: "Потратьте 5000 в категории кэшбэка Ресторана. За это вы получите +500 Тиньков и реальный кэшбэк!"
+quiz_answers2:
+  case1:
+    button_text: "Потрачено 3234/5000. Осталось чуть-чуть!"
+    respose: False
+    next_node: 0
+    tinks: 0
+    exp: 0
+
+quiz_text3: "Готовы пройти небольшой квиз?"
+quiz_answers3:
+  case1:
+    button_text: "Да"
+    respose: False
+    next_node: 5
+    tinks: 0
+    exp: 0
+  case2:
+    button_text: "Нет"
+    respose: False
+    next_node: 0
+    tinks: 0
+    exp: 0
+
+quiz_text5: "Можно ли купить билеты на концерт прямо в приложении Тинькофф?"
+quiz_answers5:
+  case1:
+    button_text: "Да"
+    respose: False
+    next_node: 6
+    tinks: 100
+    exp: 10
+  case2:
+    button_text: "Нет"
+    respose: False
+    next_node: 7
+    tinks: 0
+    exp: 0
+
+quiz_text6: "Верно! К тому же, вы ещё и получите кэшбэк до 10%.\n А что нельзя сделать с помощью приложения Тинькофф?"
+quiz_answers6:
+  case1:
+    button_text: "Улететь в другую страну"
+    respose: False
+    next_node: 8
+    tinks: 30
+    exp: 5
+  case2:
+    button_text: "Забронировать столик в ресторане"
+    respose: False
+    next_node: 8
+    tinks: 30
+    exp: 5
+  case3:
+    button_text: "Записаться к стоматологу"
+    respose: False
+    next_node: 9
+    tinks: 150
+    exp: 15
+
+quiz_text7: "Не угадали :pensive:! Вы действительно можете купить билет в приложении, к тому же ещё и получите кэшбэк до 10%!\n А что нельзя сделать с помощью приложения Тинькофф?"
+quiz_answers7:
+  case1:
+    button_text: "Улететь в другую страну"
+    respose: False
+    next_node: 8
+    tinks: 30
+    exp: 5
+  case2:
+    button_text: "Забронировать столик в ресторане"
+    respose: False
+    next_node: 8
+    tinks: 30
+    exp: 5
+  case3:
+    button_text: "Записаться к стоматологу"
+    respose: False
+    next_node: 9
+    tinks: 150
+    exp: 15
+
+quiz_text8: "Это можно! А вот к стоматологу записаться пока что нельзя.\n Кстати о стоматологах, они наверняка часто говорили вам, что сладкое вредно для зубов? Как думаете, сколько бы вы заработали, отказавшись от сладкого на год и вложив сэкономленные деньги в акции Apple?"
+quiz_answers8:
+  case1:
+    button_text: "1000 - 5000 рублей"
+    respose: False
+    next_node: 10
+    tinks: 30
+    exp: 5
+  case2:
+    button_text: "5000 - 10000 рублей"
+    respose: False
+    next_node: 11
+    tinks: 150
+    exp: 15
+  case3:
+    button_text: "10000 - 20000 рублей"
+    respose: False
+    next_node: 10
+    tinks: 30
+    exp: 5
+
+quiz_text9: "Действительно, к стоматологу записаться пока что нельзя.\n Кстати о стоматологах, они наверняка часто говорили вам, что сладкое вредно для зубов? Как думаете, сколько бы вы заработали, отказавшись от сладкого на год и вложив сэкономленные деньги в акции Apple?"
+quiz_answers9:
+  case1:
+    button_text: "1000 - 5000 рублей"
+    respose: False
+    next_node: 10
+    tinks: 30
+    exp: 5
+  case2:
+    button_text: "5000 - 10000 рублей"
+    respose: False
+    next_node: 11
+    tinks: 150
+    exp: 15
+  case3:
+    button_text: "10000 - 20000 рублей"
+    respose: False
+    next_node: 10
+    tinks: 30
+    exp: 5
+
+quiz_text10: "Вы не правы! Акции Apple выросли за календарный год на 105.43%, в среднем это могло дать вам прибыль в 7000 рублей."
+quiz_answers10:
+  case1:
+    button_text: "Меню"
+    respose: False
+    next_node: 0
+    tinks: 30
+    exp: 5
+
+quiz_text11: "Вы правы! Акции Apple выросли за календарный год на 105.43%, в среднем это могло дать вам прибыль в 7000 рублей."
+quiz_answers11:
+  case1:
+    button_text: "Меню"
+    respose: False
+    next_node: 0
+    tinks: 30
+    exp: 5
+
+quiz_text4: "Вы попали в зоопарк Владивостока. Вам срочно необходимо купить банан в ближайшем магазине реального мира!"
+quiz_answers4:
+  case1:
+    button_text: "Отправьте геолокацию..."
+    respose: False
+    next_node: 0
+    tinks: 0
+    exp: 0
