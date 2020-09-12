@@ -10,14 +10,14 @@ start_answers:
   case2:
     button_text: "Вложить тиньки в тинькофф инвестиции"
     respose: False
-    next_node: None
+    next_node: -1
     tinks: 0
     exp: 0
 
   case3:
     button_text: "Петь на станции за чаевые"
     respose: False
-    next_node: None
+    next_node: -1
     tinks: 0
     exp: 0
 
@@ -103,7 +103,7 @@ answers_5:
     next_node: 6
     tinks: 0
     exp: 0
-  case1:
+  case2:
     button_text: "Зайду поем"
     respose: "Вы отлично пообедали в ‘Трех палочках’, остались сытыми и довольными. Плюс 100 xp, минус 450 тинек. Так же6 получаете кэшбек 126 тинек."
     next_node: 6
@@ -129,14 +129,14 @@ answers_6:
   case2:
     button_text: "Вложить тиньки в тинькофф инвестиции"
     respose: False
-    next_node: None
+    next_node: 6
     tinks: 0
     exp: 0
 
   case3:
     button_text: "Петь за чаевые"
     respose: False
-    next_node: None
+    next_node: 6
     tinks: 0
     exp: 0
 
@@ -160,14 +160,14 @@ answers_7:
   case2:
     button_text: "Вложить тиньки в тинькофф инвестиции"
     respose: False
-    next_node: None
+    next_node: 7
     tinks: 0
     exp: 0
 
   case3:
     button_text: "Петь за чаевые"
     respose: False
-    next_node: None
+    next_node: 7
     tinks: 0
     exp: 0
 
@@ -184,7 +184,7 @@ answers_8:
   case1:
     button_text: "Владивосток-Хабаровск"
     respose: "Вы потратили 800 тинек, но вы уже мчите на поезде до Хабаровска. Встретимся с вами там! Минус 800 тинек.\n … Открыта новая глава Хабаровск…"
-    next_node: None
+    next_node: 8
     tinks: -800
     exp: 0
 

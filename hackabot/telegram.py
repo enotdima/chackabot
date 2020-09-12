@@ -14,6 +14,10 @@ import granula
 
 logger = logging.getLogger('telegram')
 
+money = {}
+exp = {}
+curr_case = {}
+
 def get_full_name(user: telebot.types.User) -> str:
     name = user.first_name or ''
     if user.last_name:
@@ -46,13 +50,17 @@ def run_bot(config_path: str):
     @bot.message_handler(commands=['start'])
     def _start(message: telebot.types.Message):
         with locks[message.chat.id]:
-
+            guy = message.from_user.id
+            print(guy)
+            curr_case[guy] = -1
+            money[guy] = 0
+            exp[guy] = 0
             response = button_texts['start_text']
             keyboard = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
             answers = []
             for i in button_texts['start_answers'].keys():
-                answers.append(types.KeyboardButton(text=button_texts['start_answers'][i]))
-            keyboard.add(answers)
+                answers.append(types.KeyboardButton(text=button_texts['start_answers'][i]['button_text']))
+            keyboard.add(*answers)
 
             _send(message, response, keyboard)
 
@@ -116,16 +124,43 @@ def run_bot(config_path: str):
 
     def _send_response(message: telebot.types.Message):
         print(f'current message: {message}')
+        print(curr_case)
+        response = None
         chat_id = message.chat.id
-        #user_id = str(message.from_user.id) if message.from_user else '<unknown>'
-
+        user_id = message.from_user.id if message.from_user else '<unknown>'
+        print(user_id)
+        keyboard = None
         with locks[chat_id]:
             try:
-                response = button_texts['text_2']#message.json.text
+                case = None
+                prev_node = curr_case[user_id]
+                if prev_node == -1:
+                    block = 'start_answers'
+                else:
+                    block = 'answers_' + str(prev_node)
+                for i in button_texts[block].keys():
+                    if button_texts[block][i]['button_text'] == message.json['text']:
+                        case = int(i[-1])
+                        if button_texts[block][i]['next_node'] == 'None':
+                            curr_case[user_id] = None
+                        else:
+                            curr_case[user_id] = int(button_texts[block][i]['next_node'])
+                        money[user_id] = button_texts[block][i]['tinks']
+                        exp[user_id] = button_texts[block][i]['exp']
+                        if button_texts[block][i]['respose']:
+                            response = button_texts[block][i]['respose'] + '\n' + button_texts['text_'+ str(curr_case[user_id])]
+                        elif curr_case[user_id] > 0:
+                            response = button_texts['text_' + str(curr_case[user_id])]
+                        else:
+                            response = None
                 keyboard = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
                 answers = []
-                for i in button_texts['answers_2'].keys():
-                    answers.append(types.KeyboardButton(text = button_texts['answers_2'][i]))
+                print(curr_case[user_id], type(curr_case[user_id]))
+                if curr_case[user_id] > -1:
+                    for i in button_texts['answers_' + str(curr_case[user_id])].keys():
+                        answers.append(types.KeyboardButton(text = button_texts['answers_'+ str(curr_case[user_id])][i]['button_text']))
+                #else:
+                #    response = None
                 keyboard.add(*answers)
 
 
