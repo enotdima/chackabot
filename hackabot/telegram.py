@@ -31,9 +31,17 @@ def run_bot(config_path: str):
     config = granula.Config.from_path(config_path)
     locks: DefaultDict[Any, Lock] = collections.defaultdict(threading.Lock)
     token = config['telegram']['key']
+    # load texts to response in quest
     button_text_path = config['telegram']['button_texts']
     with open(button_text_path, 'r') as yml_button_texts_file:
         button_texts = yaml.load(yml_button_texts_file, Loader=yaml.FullLoader)
+
+    # load text of rules
+    rules_path = config['telegram']['rules_text']
+    with open(rules_path, 'r') as yml_rules_file:
+        rules_text = yaml.load(yml_rules_file, Loader=yaml.FullLoader)
+
+
     bot = telebot.TeleBot(token)
 
     def _send(message: telebot.types.Message, response: str, keyboard = None):
@@ -63,6 +71,14 @@ def run_bot(config_path: str):
             keyboard.add(*answers)
 
             _send(message, response, keyboard)
+
+    @bot.message_handler(commands=['rules'])
+    def _rules(message: telebot.types.Message):
+        with locks[message.chat.id]:
+
+            response = rules_text['rules']
+
+            _send(message, response)
 
     @bot.message_handler(commands=['FindMerchant'])
     def _find_merchant(message: telebot.types.Message):

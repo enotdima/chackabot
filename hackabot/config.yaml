@@ -1,3 +1,4 @@
 telegram:
   key: "1300959318:AAFYZ7ZFVjHXvkdjD_UmUiRSxQVUqcPbDR8"
   button_texts: "data/on_button_texts.yml"
+  rules_text: "data/rules.yml"
