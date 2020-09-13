@@ -172,6 +172,15 @@ def run_bot(config_path: str):
                 exc = True
                 # quiz part
                 # TODO add case and keyboard logic as in quest
+                if message.text == quiz_text['quiz_answers12']['case2']['button_text']:
+                        # TODO
+                        #for quiz_key == "case4" add to normal response:
+                        response = "Поздравляю, вы нашли банан!"
+                        sleep(7.0)
+                        exc = False
+                        _send(message, response)
+                        pass
+
                 if message.text == quiz_text['quiz_answers4']['case1']['button_text']:
                         # TODO
                         #for quiz_key == "case4" add to normal response:
@@ -179,6 +188,9 @@ def run_bot(config_path: str):
                         exc = False
                         _send(message, response)
                         pass
+                if message.photo != None:
+                    _send(message, 'Ты нашёл его! Обезьяна была рада.')
+                    pass
 
                 case = None
                 prev_node = curr_case[user_id]
