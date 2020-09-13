@@ -11,12 +11,14 @@ import requests
 import telebot
 from telebot import types
 import granula
+from time import sleep
 
 logger = logging.getLogger('telegram')
 
 money = {}
 exp = {}
 curr_case = {}
+sub_case = {}
 
 def get_full_name(user: telebot.types.User) -> str:
     name = user.first_name or ''
@@ -74,6 +76,7 @@ def run_bot(config_path: str):
             keyboard.add(*answers)
 
             _send(message, response, keyboard)
+    
 
     @bot.message_handler(commands=['rules'])
     def _rules(message: telebot.types.Message):
@@ -91,10 +94,11 @@ def run_bot(config_path: str):
             _send(message, response)
 
     @bot.message_handler(commands = ['quiz'])
-    def _state(message:telebot.types.Message):
+    def _quiz(message:telebot.types.Message):
         with locks[message.chat.id]:
             response = quiz_text['quiz_text']
-
+            guy = message.from_user.id
+            sub_case[guy] = -1
             keyboard = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
             answers = []
             for quiz_key in quiz_text['quiz_answers']:
@@ -158,20 +162,22 @@ def run_bot(config_path: str):
         print(message.location)
         print('########')
 
-        response = None
+        response = ''
         chat_id = message.chat.id
         user_id = message.from_user.id if message.from_user else '<unknown>'
 
         keyboard = None
         with locks[chat_id]:
             try:
+                exc = True
                 # quiz part
                 # TODO add case and keyboard logic as in quest
-                for quiz_key in quiz_text['quiz_answers']:
-                    if message.text == quiz_text['quiz_answers'][quiz_key]['button_text']:
+                if message.text == quiz_text['quiz_answers4']['case1']['button_text']:
                         # TODO
-                        # for quiz_key == "case4" add to normal response:
-                        # _find_product("банан")
+                        #for quiz_key == "case4" add to normal response:
+                        response = _find_product("банан")
+                        exc = False
+                        _send(message, response)
                         pass
 
                 case = None
@@ -180,8 +186,10 @@ def run_bot(config_path: str):
                     block = 'start_answers'
                 else:
                     block = 'answers_' + str(prev_node)
+                is_quiz = True
                 for i in button_texts[block].keys():
-                    if button_texts[block][i]['button_text'] == message.json['text']:
+                    if button_texts[block][i]['button_text'] == message.json['text'] and exc:
+                        is_quiz = False
                         case = int(i[-1])
                         if button_texts[block][i]['next_node'] == 'None':
                             curr_case[user_id] = None
@@ -190,28 +198,62 @@ def run_bot(config_path: str):
                         money[user_id] += int(button_texts[block][i]['tinks'])
                         exp[user_id] += int(button_texts[block][i]['exp'])
                         if button_texts[block][i]['respose']:
-                            response = button_texts[block][i]['respose'] + '\n' + '\n' + button_texts['text_'+ str(curr_case[user_id])]
+                            
+                            response = button_texts[block][i]['respose']
+                            _send(message, response)
+                            sleep(2.0)
+                            response = button_texts['text_'+ str(curr_case[user_id])]
                         elif curr_case[user_id] > 0:
                             response = button_texts['text_' + str(curr_case[user_id])]
                         else:
                             response = None
+                if is_quiz:
+                    prev_node = sub_case[user_id]
+                    if prev_node == -1 or prev_node == 0:
+                        block = 'quiz_answers'
+                    else:
+                        block = 'quiz_answers' + str(prev_node)
+                    for i in quiz_text[block].keys():
+                        if message.json['text'] == quiz_text[block][i]['button_text']:
+                            case = int(i[-1])
+                            sub_case[user_id] = int(quiz_text[block][i]['next_node'])
+                            money[user_id] += int(quiz_text[block][i]['tinks'])
+                            exp[user_id] += int(quiz_text[block][i]['exp'])
+                            if  sub_case[user_id] > 0:
+                                text = 'quiz_text' + str(sub_case[user_id])
+                            else:
+                                text = 'quiz_text'
+                            if quiz_text[block][i]['respose'] and quiz_text[block][i]['respose']!= -1:
+                                response = quiz_text[block][i]['respose']
+                                _send(message, response)
+                                sleep(2.0)
+                                response = quiz_text[text]
+                            else:
+                                response = quiz_text[text]
+
                 keyboard = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
                 answers = []
-                print('curr_case[user_id]:', curr_case[user_id])
-                if curr_case[user_id] > -1:
+                if is_quiz:
+                    if sub_case[user_id] > 0:
+                        block = 'quiz_answers' + str(sub_case[user_id])
+                    else:
+                        block = 'quiz_answers'
+                    for i in quiz_text[block].keys():
+                        answers.append(types.KeyboardButton(text = quiz_text[block][i]['button_text']))
+                elif curr_case[user_id] > 0:
                     for i in button_texts['answers_' + str(curr_case[user_id])].keys():
                         answers.append(types.KeyboardButton(text = button_texts['answers_'+ str(curr_case[user_id])][i]['button_text']))
                 #else:
                 #    response = None
                 keyboard.add(*answers)
-
-
+            
             except Exception as e:
                 logger.exception(e)
                 response = 'Произошла ошибка'
 
+            print(message)
             if response is None:
-                response = 'Ответа нет'
+                response = 'Кнопка в разработке.'
 
             _send(message, response, keyboard)
 
