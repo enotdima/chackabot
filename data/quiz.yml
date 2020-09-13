@@ -61,6 +61,15 @@ quiz_answers3:
     tinks: 0
     exp: 0
 
+quiz_text4: "Вы попали в зоопарк Владивостока. Вам срочно необходимо купить банан в ближайшем магазине реального мира!"
+quiz_answers4:
+  case1:
+    button_text: "Отправьте геолокацию..."
+    respose: False
+    next_node: 0
+    tinks: 0
+    exp: 0
+
 quiz_text5: "Можно ли купить билеты на концерт прямо в приложении Тинькофф?"
 quiz_answers5:
   case1:
@@ -177,12 +186,3 @@ quiz_answers11:
     next_node: 0
     tinks: 30
     exp: 5
-
-quiz_text4: "Вы попали в зоопарк Владивостока. Вам срочно необходимо купить банан в ближайшем магазине реального мира!"
-quiz_answers4:
-  case1:
-    button_text: "Отправьте геолокацию..."
-    respose: False
-    next_node: 0
-    tinks: 0
-    exp: 0
